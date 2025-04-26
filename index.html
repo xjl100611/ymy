@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✨生日特典✨</title>
+    <style>
+        :root {
+            --primary-color: #ff69b4;
+            --secondary-color: #ff85c2;
+        }
+
+        /* 星空背景 */
+        body {
+            margin: 0;
+            height: 100vh;
+            background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* 粒子特效 */
+        .particles {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        /* 主容器 */
+        .container {
+            position: relative;
+            z-index: 2;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        /* 3D旋转标题 */
+        .title {
+            font-family: 'Ma Shan Zheng', cursive;
+            color: var(--primary-color);
+            font-size: 4rem;
+            text-shadow: 0 0 20px rgba(255,105,180,0.5);
+            perspective: 1000px;
+            margin: 2rem 0;
+            animation: rotate3d 8s infinite linear;
+        }
+
+        @keyframes rotate3d {
+            0%, 100% { transform: rotateY(0deg); }
+            50% { transform: rotateY(180deg); }
+        }
+
+        /* 流光文字 */
+        .message {
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e, #ffb3b3);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-size: 1.5rem;
+            line-height: 2;
+            padding: 20px;
+            position: relative;
+        }
+
+        /* 魔法按钮 */
+        .magic-btn {
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #ff6b6b, #ff85c2);
+            border: none;
+            border-radius: 30px;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(255,105,180,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .magic-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255,105,180,0.5);
+        }
+
+        /* 光效 */
+        .light-beam {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 0%, rgba(255,255,255,0.4), transparent 60%);
+            animation: beam 2s infinite;
+        }
+
+        /* 动态花边 */
+        .floral-border {
+            position: absolute;
+            width: 150%;
+            height: auto;
+            opacity: 0.3;
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes beam {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+
+        /* 手机适配 */
+        @media (max-width: 768px) {
+            .title { font-size: 2.5rem; }
+            .message { font-size: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 粒子特效 -->
+    <canvas class="particles"></canvas>
+
+    <div class="container">
+        <!-- 动态花边 -->
+        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cGF0aCBkPSJNMjUgMTBjLTEwIDAtMTUgMTAtMTUgMTVzNSA1IDEwIDEwYzEwLTEwIDIwLTEwIDMwLTIwLTEwIDAtMTUgNS0yMCAxMHMyMCAxNSAyNSAyMGM1LTEwIDAtMjAtMTAtMzAgMTAgMCAxNS0xMCAyMC0xNS0xMCA1LTIwIDAtMzAtMTB6IiBmaWxsPSIjZmY4NWMyIi8+PC9zdmc+" 
+             class="floral-border"
+             style="top: 10%; left: -25%;">
+
+        <h1 class="title">🎂 Happy Birthday! 🌸</h1>
+        
+        <div class="message">
+            <p>✨ 愿所有美好如期而至</p>
+            <p>🌸 愿所有幸运不期而遇</p>
+            <p>🎉 祝你岁岁皆欢愉</p>
+            <p>❤️ 年年皆胜意</p>
+        </div>
+
+        <button class="magic-btn" onclick="showFireworks()">
+            <div class="light-beam"></div>
+            点亮魔法 ✨
+        </button>
+    </div>
+
+    <script>
+        // 粒子系统
+        function initParticles() {
+            const canvas = document.querySelector('.particles');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const particles = [];
+            class Particle {
+                constructor() {
+                    this.reset();
+                }
+                reset() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.size = Math.random() * 2 + 1;
+                    this.speed = Math.random() * 0.5 + 0.5;
+                }
+                update() {
+                    this.y += this.speed;
+                    if (this.y > canvas.height) this.reset();
+                }
+                draw() {
+                    ctx.fillStyle = `rgba(255,133,194,${this.size/3})`;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI*2);
+                    ctx.fill();
+                }
+            }
+
+            // 创建粒子
+            for (let i=0; i<100; i++) particles.push(new Particle());
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach(p => {
+                    p.update();
+                    p.draw();
+                });
+                requestAnimationFrame(animate);
+            }
+            animate();
+        }
+
+        // 烟花特效
+        function showFireworks() {
+            const colors = ['#ff6b6b', '#ff85c2', '#ffd3b6'];
+            for(let i=0; i<50; i++){
+                const spark = document.createElement('div');
+                spark.style.cssText = `
+                    position: fixed;
+                    width: 6px;
+                    height: 6px;
+                    background: ${colors[Math.floor(Math.random()*3)]};
+                    border-radius: 50%;
+                    left: ${Math.random()*100}%;
+                    top: ${Math.random()*100}%;
+                    animation: explode 1s ease-out;
+                `;
+                document.body.appendChild(spark);
+                setTimeout(() => spark.remove(), 1000);
+            }
+        }
+
+        // 初始化
+        window.onload = initParticles;
+        window.onresize = initParticles;
+    </script>
+</body>
+</html>
